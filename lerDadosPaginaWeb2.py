@@ -1,5 +1,11 @@
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup as soup
+import pymongo
+
+#CONFIG MONGO:
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["extradb"]
+mycol = mydb["celulares"]
 
 numeroPagina=1
 
@@ -32,5 +38,8 @@ print("descricao, preco")
 
 contador = 0
 for dados in nomeCelular:
-    print("{} - {} ".format(str(listNome[contador]),str(listPreco[contador])))
+    #print("{} - {} ".format(str(listNome[contador]),str(listPreco[contador])))
+    registro = {"nome": str(listNome[contador]), "preco": str(listPreco[contador])}
+    x = mycol.insert_one(registro)
+    print(x.inserted_id)
     contador = contador + 1
